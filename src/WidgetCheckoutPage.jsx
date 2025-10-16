@@ -1,7 +1,7 @@
+import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import "./App.css";
 import getOrderIdPrefix from "./util/service";
-import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 
 // 전자결제 신청 및 가입 완료 후, clientKey 를 다음으로 수정할 것.
 // 개발자센터의 결제위젯 연동 키 > 클라이언트 키

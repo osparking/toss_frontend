@@ -46,6 +46,37 @@ function WidgetCheckoutPage() {
 
   const [ready, setReady] = useState(false);
 
+  useEffect(() => {
+    async function renderPaymentWidgets() {
+      if (widgets == null) {
+        return;
+      }
+      // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
+      await widgets.setAmount(amount);
+
+      await Promise.all([
+        // ------  결제 UI 렌더링 ------
+        // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrenderpaymentmethods
+        widgets.renderPaymentMethods({
+          selector: "#payment-method",
+          // 렌더링하고 싶은 결제 UI의 variantKey
+          // 결제 수단 및 스타일이 다른 멀티 UI를 직접 만들고 싶다면 계약이 필요해요.
+          // @docs https://docs.tosspayments.com/guides/v2/payment-widget/admin#새로운-결제-ui-추가하기
+          variantKey: "DEFAULT",
+        }),
+        // ------  이용약관 UI 렌더링 ------
+        // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrenderagreement
+        widgets.renderAgreement({
+          selector: "#agreement",
+          variantKey: "AGREEMENT",
+        }),
+      ]);
+
+      setReady(true);
+    }
+
+    renderPaymentWidgets();
+  }, [widgets]);
   // return (
   //   <>
   //     <h1>결제 창</h1>

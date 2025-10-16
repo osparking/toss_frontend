@@ -1,7 +1,7 @@
 import "./App.css";
 import getOrderIdPrefix from "./util/service";
 
-function App() {
+function WidgetCheckoutPage() {
   const amount = 10700;
   const productName = "백설공주 2개 등";
   const orderId = getOrderIdPrefix(6);
@@ -20,4 +20,4 @@ function App() {
   );
 }
 
-export default App;
+export default WidgetCheckoutPage;

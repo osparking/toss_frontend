@@ -98,41 +98,6 @@ function WidgetCheckoutPage() {
         <div id="payment-method" />
         {/* 이용약관 UI */}
         <div id="agreement" />
-        {/* 쿠폰 체크박스 */}
-        <div style={{ paddingLeft: "30px" }}>
-          <div className="checkable typography--p">
-            <label
-              htmlFor="coupon-box"
-              className="checkable__label typography--regular"
-            >
-              <input
-                id="coupon-box"
-                className="checkable__input"
-                type="checkbox"
-                aria-checked="true"
-                disabled={!ready}
-                // ------  주문서의 결제 금액이 변경되었을 경우 결제 금액 업데이트 ------
-                // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
-                onChange={async (event) => {
-                  if (event.target.checked) {
-                    await widgets.setAmount({
-                      currency: amount.currency,
-                      value: amount.value - 5000,
-                    });
-
-                    return;
-                  }
-
-                  await widgets.setAmount({
-                    currency: amount.currency,
-                    value: amount.value,
-                  });
-                }}
-              />
-              <span className="checkable__label-text">5,000원 쿠폰 적용</span>
-            </label>
-          </div>
-        </div>
 
         {/* 결제하기 버튼 */}
         <button

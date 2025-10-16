@@ -1,8 +1,12 @@
+import { useState } from "react";
 import "./App.css";
 import getOrderIdPrefix from "./util/service";
 
 function WidgetCheckoutPage() {
-  const amount = 10700;
+  const [amount, setAmount] = useState({
+    currency: "KRW",
+    value: 10700,
+  });
   const productName = "백설공주 2개 등";
   const orderId = getOrderIdPrefix(6);
 
@@ -12,7 +16,7 @@ function WidgetCheckoutPage() {
       <div>
         <ul style={{ textAlign: "left" }}>
           <li>내역: {productName}</li>
-          <li>금액: {amount}원</li>
+          <li>금액: {amount.value}원</li>
           <li>주문ID: {orderId}00000001</li>
         </ul>
       </div>

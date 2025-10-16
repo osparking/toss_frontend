@@ -77,22 +77,23 @@ function WidgetCheckoutPage() {
 
     renderPaymentWidgets();
   }, [widgets]);
-  // return (
-  //   <>
-  //     <h1>결제 창</h1>
-  //     <div>
-  //       <ul style={{ textAlign: "left" }}>
-  //         <li>내역: {productName}</li>
-  //         <li>금액: {amount.value.toLocaleString()}원</li>
-  //         <li>주문ID: {orderId}00000001</li>
-  //       </ul>
-  //     </div>
-  //   </>
-  // );
 
   return (
     <div className="wrapper">
       <div className="box_section">
+        <h3>구매 내역 요약</h3>
+        <ul
+          style={{
+            textAlign: "left",
+            border: "1px solid black",
+            width: "90%",
+            margin: "5%",
+          }}
+        >
+          <li>내역: {productName}</li>
+          <li>금액: {amount.value.toLocaleString()}원</li>
+          <li>주문ID: {orderId}00000001</li>
+        </ul>
         {/* 결제 UI */}
         <div id="payment-method" />
         {/* 이용약관 UI */}

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import getOrderIdPrefix from "./util/service";
+import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 
 // 전자결제 신청 및 가입 완료 후, clientKey 를 다음으로 수정할 것.
 // 개발자센터의 결제위젯 연동 키 > 클라이언트 키
@@ -18,6 +19,30 @@ function WidgetCheckoutPage() {
   });
   const productName = "백설공주 2개 등";
   const orderId = getOrderIdPrefix(6);
+
+  const [widgets, setWidgets] = useState(null);
+
+  useEffect(() => {
+    async function fetchPaymentWidgets() {
+      try {
+        const tossPayments = await loadTossPayments(clientKey);
+
+        // 회원 결제
+        // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentswidgets
+        const widgets = tossPayments.widgets({
+          customerKey,
+        });
+        // 비회원 결제
+        // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
+
+        setWidgets(widgets);
+      } catch (error) {
+        console.error("Error fetching payment widget:", error);
+      }
+    }
+
+    fetchPaymentWidgets();
+  }, [clientKey, customerKey]);
 
   return (
     <>

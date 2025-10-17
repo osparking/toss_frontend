@@ -18,7 +18,7 @@ function WidgetCheckoutPage() {
     value: 10700,
   });
   const productName = "백설공주 2개 등";
-  const orderId = getOrderIdPrefix(6);
+  const orderId = getOrderIdPrefix(6) + "00000001";
 
   const [widgets, setWidgets] = useState(null);
 
@@ -92,7 +92,7 @@ function WidgetCheckoutPage() {
         >
           <li>내역: {productName}</li>
           <li>금액: {amount.value.toLocaleString()}원</li>
-          <li>주문ID: {orderId}00000001</li>
+          <li>주문ID: {orderId}</li>
         </ul>
         {/* 결제 UI */}
         <div id="payment-method" />
@@ -111,8 +111,8 @@ function WidgetCheckoutPage() {
               // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
               // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
               await widgets.requestPayment({
-                orderId: `${orderId}00000001`, // 주문 고유 번호
-                orderName: `${productName}`,
+                orderId: orderId, // 주문 고유 번호
+                orderName: productName,
                 successUrl: window.location.origin + "/widget/success", // 결제 요청이 성공하면 리다이렉트되는 URL
                 failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
                 customerEmail: "customer123@gmail.com",

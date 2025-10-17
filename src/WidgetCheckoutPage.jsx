@@ -2,6 +2,7 @@ import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import "./App.css";
 import getOrderIdPrefix from "./util/service";
+import { api } from "./util/api";
 
 // 전자결제 신청 및 가입 완료 후, clientKey 를 다음으로 수정할 것.
 // 개발자센터의 결제위젯 연동 키 > 클라이언트 키
@@ -110,10 +111,23 @@ function WidgetCheckoutPage() {
             try {
               // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
               // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
+              const saveAmountReq = {
+                orderId: orderId,
+                amount: amount.value,
+              };
+              console.log("save requested amount: ", JSON.stringify(saveAmountReq));              
+              await api
+                .post("/saveAmount", saveAmountReq)
+                .then((response) => {
+                  console.log("Success:", response.data);
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
               await widgets.requestPayment({
                 orderId: orderId, // 주문 고유 번호
                 orderName: productName,
-                successUrl: window.location.origin + "/widget/success", // 결제 요청이 성공하면 리다이렉트되는 URL
+                successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
                 failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
                 customerEmail: "customer123@gmail.com",
                 customerName: "김토스",

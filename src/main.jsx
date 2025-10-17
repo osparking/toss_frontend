@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./App.css";
-import WidgetCheckoutPage from "./WidgetCheckoutPage.jsx";
+import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <WidgetCheckoutPage />
+    <App />
   </StrictMode>
 );

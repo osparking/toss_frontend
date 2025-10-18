@@ -11,7 +11,7 @@ export function WidgetSuccessPage() {
     async function confirm() {
       const params = {
         orderId: searchParams.get("orderId"),
-        amount: parseInt(searchParams.get("amount")),
+        amount: parseInt(searchParams.get("amount")) + 100,
       };
       console.log("saved amount check request: ", JSON.stringify(params));
 

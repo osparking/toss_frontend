@@ -29,11 +29,10 @@ export function WidgetSuccessPage() {
         },
       });
 
-      let json = await response.json();
-      console.log("json: ", json);
+      let amountMatches = await response.json();
 
-      if (!response.ok) {
-        throw { message: json.message, code: json.code };
+      if (!amountMatches) {
+        throw { message: "결제 금액 불일치 오류", code: 400 };
       } 
       const requestData = {
         ...params,
@@ -48,8 +47,8 @@ export function WidgetSuccessPage() {
         body: JSON.stringify(requestData),
       });
 
-      json = await response.json();
-      return json;
+      const paymentConfirmResponse = await response.json();
+      return paymentConfirmResponse;
     }         
 
     confirm()

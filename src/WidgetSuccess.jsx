@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { prefix } from "./util/api";
 
 export function WidgetSuccessPage() {
   const navigate = useNavigate();
@@ -28,19 +29,18 @@ export function WidgetSuccessPage() {
         },
       });
 
-      const json = await response.json();
+      let json = await response.json();
       console.log("json: ", json);
 
       if (!response.ok) {
         throw { message: json.message, code: json.code };
       } 
       const requestData = {
-        orderId: searchParams.get("orderId"),
-        amount: searchParams.get("amount"),
+        ...params,
         paymentKey: searchParams.get("paymentKey"),
       };
 
-      response = await fetch("/api/confirm/widget", {
+      response = await fetch(`${prefix}/confirm`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export function WidgetSuccessPage() {
         body: JSON.stringify(requestData),
       });
 
-      // json = await response.json();
+      json = await response.json();
       return json;
     }         
 

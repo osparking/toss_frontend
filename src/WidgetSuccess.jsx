@@ -64,7 +64,7 @@ export function WidgetSuccessPage() {
     <>
       <div className="box_section" style={{ width: "600px" }}>
         <img width="100px" src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" />
-        <h2>결제를 완료했어요</h2>
+        <h2>결제가 완료되었습니다</h2>
         <div className="p-grid typography--p" style={{ marginTop: "50px" }}>
           <div className="p-grid-col text--left">
             <b>결제금액</b>

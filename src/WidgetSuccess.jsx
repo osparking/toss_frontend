@@ -8,13 +8,39 @@ export function WidgetSuccessPage() {
 
   useEffect(() => {
     async function confirm() {
+      const params = {
+        orderId: searchParams.get("orderId"),
+        amount: parseInt(searchParams.get("amount")),
+      };
+      console.log("saved amount check request: ", JSON.stringify(params));
+
+      // For GET requests - using URL object
+      const url = new URL('http://localhost:9193/payments/checkAmount');
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value);
+      });
+
+      let response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const json = await response.json();
+      console.log("json: ", json);
+
+      if (!response.ok) {
+        throw { message: json.message, code: json.code };
+      } 
       const requestData = {
         orderId: searchParams.get("orderId"),
         amount: searchParams.get("amount"),
         paymentKey: searchParams.get("paymentKey"),
       };
 
-      const response = await fetch("/api/confirm/widget", {
+      response = await fetch("/api/confirm/widget", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,14 +48,9 @@ export function WidgetSuccessPage() {
         body: JSON.stringify(requestData),
       });
 
-      const json = await response.json();
-
-      if (!response.ok) {
-        throw { message: json.message, code: json.code };
-      }
-
+      // json = await response.json();
       return json;
-    }
+    }         
 
     confirm()
       .then((data) => {

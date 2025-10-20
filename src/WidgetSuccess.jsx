@@ -67,6 +67,16 @@ export function WidgetSuccessPage() {
       });
   }, [searchParams]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const doneData = [
+    { property: "구매 항목:", value: orderName },
+    { property: "주문 번호:", value: searchParams.get("orderId") },
+    {
+      property: "결제 금액:",
+      value: Number(searchParams.get("amount")).toLocaleString() + "원",
+    },
+    { property: "결제 키:", value: searchParams.get("paymentKey") },
+  ];
   return (
     <>
       <div className="box_section" style={{ width: "600px" }}>

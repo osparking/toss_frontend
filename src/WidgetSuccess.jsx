@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "./App.css";
+import PaymentDoneModal from "./modal/PaymentDone";
 import { prefix } from "./util/api";
 
 export function WidgetSuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [responseData, setResponseData] = useState(null);
+  const [orderName, setOrderName] = useState("");
 
   useEffect(() => {
     async function confirm() {
@@ -16,24 +19,26 @@ export function WidgetSuccessPage() {
       console.log("saved amount check request: ", JSON.stringify(params));
 
       // For GET requests - using URL object
-      const url = new URL('http://localhost:9193/payments/checkAmount');
+      const url = new URL("http://localhost:9193/payments/checkAmount");
       Object.entries(params).forEach(([key, value]) => {
         url.searchParams.append(key, value);
       });
 
       let response = await fetch(url, {
-        method: 'GET',
-        credentials: 'include',
+        method: "GET",
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
-      let amountMatches = await response.json();
-
-      if (!amountMatches) {
+      let checkResult = await response.json();
+      console.log("response: ", JSON.stringify(checkResult));
+      if (!checkResult.matches) {
         throw { message: "결제 금액 불일치 오류", code: 400 };
-      } 
+      }
+      setOrderName(checkResult.productName);
+
       const requestData = {
         ...params,
         paymentKey: searchParams.get("paymentKey"),
@@ -49,11 +54,13 @@ export function WidgetSuccessPage() {
 
       const paymentConfirmResponse = await response.json();
       return paymentConfirmResponse;
-    }         
+    }
 
     confirm()
       .then((data) => {
         setResponseData(data);
+        console.log("order name: ", data.orderName);
+        setIsModalOpen(true);
       })
       .catch((error) => {
         navigate(`/fail?code=${error.code}&message=${error.message}`);

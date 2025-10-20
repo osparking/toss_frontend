@@ -9,6 +9,7 @@ export function WidgetSuccessPage() {
   const [searchParams] = useSearchParams();
   const [responseData, setResponseData] = useState(null);
   const [orderName, setOrderName] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function confirm() {
@@ -67,7 +68,6 @@ export function WidgetSuccessPage() {
       });
   }, [searchParams]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const doneData = [
     { property: "구매 항목:", value: orderName },
     { property: "주문 번호:", value: searchParams.get("orderId") },

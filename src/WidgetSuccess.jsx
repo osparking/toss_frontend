@@ -79,35 +79,41 @@ export function WidgetSuccessPage() {
   ];
   return (
     <>
-      <div className="box_section" style={{ width: "600px" }}>
-        <img width="100px" src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" />
-        <h2>결제가 완료되었습니다</h2>
-        <div className="p-grid typography--p" style={{ marginTop: "50px" }}>
-          <div className="p-grid-col text--left">
-            <b>결제금액</b>
-          </div>
-          <div className="p-grid-col text--right" id="amount">
-            {`${Number(searchParams.get("amount")).toLocaleString()}원`}
-          </div>
-        </div>
-        <div className="p-grid typography--p" style={{ marginTop: "10px" }}>
-          <div className="p-grid-col text--left">
-            <b>주문번호</b>
-          </div>
-          <div className="p-grid-col text--right" id="orderId">
-            {`${searchParams.get("orderId")}`}
-          </div>
-        </div>
-        <div className="p-grid typography--p" style={{ marginTop: "10px" }}>
-          <div className="p-grid-col text--left">
-            <b>paymentKey</b>
-          </div>
-          <div className="p-grid-col text--right" id="paymentKey" style={{ whiteSpace: "initial", width: "250px" }}>
-            {`${searchParams.get("paymentKey")}`}
-          </div>
-        </div>
-      </div>
-      <div className="box_section" style={{ width: "600px", textAlign: "left" }}>
+      <PaymentDoneModal
+        show={isModalOpen}
+        onHide={() => setIsModalOpen(false)}
+        title="결제 완료"
+      >
+        <img
+          width="100px"
+          src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png"
+        />
+        <h4>결제 완료 내용:</h4>
+        <table border="1" style={{ borderCollapse: "collapse", width: "80%" }}>
+          <tbody>
+            {doneData.map((item, index) => (
+              <tr key={index}>
+                <th
+                  style={{
+                    textAlign: "right",
+                    padding: "8px",
+                    backgroundColor: "#f5f5f5",
+                  }}
+                >
+                  {item.property}
+                </th>
+                <td style={{ padding: "8px", textAlign: "left" }}>
+                  {item.value}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </PaymentDoneModal>
+      <div
+        className="box_section"
+        style={{ width: "600px", textAlign: "left" }}
+      >
         <b>Response Data :</b>
         <div id="response" style={{ whiteSpace: "initial" }}>
           {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}

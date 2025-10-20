@@ -110,18 +110,19 @@ function WidgetCheckoutPage() {
           onClick={async () => {
             try {
               // 결제를 요청 전, 결제 정보(orderId, amount) 서버 저장 - 결제 금액 확인 용
-              const saveAmountReq = {
+              const saveProductInfoReq = {
                 orderId: orderId,
                 amount: amount.value,
+                productName: productName,
               };
-              console.log("저장되는 금액: ", JSON.stringify(saveAmountReq));
+              console.log("저장 정보: ", JSON.stringify(saveProductInfoReq));
               await api
-                .post("/saveAmount", saveAmountReq)
+                .post("/saveProductInfo", saveProductInfoReq)
                 .then((response) => {
-                  console.log("금액 동일:", response.data);
+                  console.log("금액 저장:", response.data);
                 })
                 .catch((error) => {
-                  console.error("금액 상이:", error);
+                  console.error("저장 실패:", error);
                 });
               await widgets.requestPayment({
                 orderId: orderId, // 주문 고유 번호

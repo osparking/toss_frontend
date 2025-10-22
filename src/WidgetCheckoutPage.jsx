@@ -1,7 +1,6 @@
 import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import "./App.css";
-import getOrderIdPrefix from "./util/service";
 import { api } from "./util/api";
 
 // 전자결제 신청 및 가입 완료 후, clientKey 를 다음으로 수정할 것.
@@ -14,14 +13,32 @@ function generateRandomString() {
 }
 
 function WidgetCheckoutPage() {
-  const [amount, setAmount] = useState({
-    currency: "KRW",
-    value: 10700,
-  });
-  const productName = "백설공주 2개 등";
-  const orderId = getOrderIdPrefix(6) + "00000001";
-
+  const [bsOrder, setBsOrder] = useState({});
   const [widgets, setWidgets] = useState(null);
+
+  useEffect(() => {
+    async function fetchOrderInfo() {
+      try {
+        console.log("후단에서 orderId 등 결제 정보를 읽어온다.");
+        const url = new URL("http://localhost:9193/payments/orderInfo");
+        let response = await fetch(url, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        let orderInfo = await response.json();
+        setBsOrder(orderInfo);
+        console.log("주문 정보: ", JSON.stringify(orderInfo));
+      } catch (error) {
+        console.error("주문 정보 읽기 오류:", error);
+      }
+    }
+
+    fetchOrderInfo();
+  }, []);
 
   useEffect(() => {
     async function fetchPaymentWidgets() {
@@ -53,7 +70,10 @@ function WidgetCheckoutPage() {
         return;
       }
       // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
-      await widgets.setAmount(amount);
+      await widgets.setAmount({
+        currency: "KRW",
+        value: bsOrder.amount,
+      });
 
       await Promise.all([
         // ------  결제 UI 렌더링 ------
@@ -91,9 +111,9 @@ function WidgetCheckoutPage() {
             margin: "5%",
           }}
         >
-          <li>내역: {productName}</li>
-          <li>금액: {amount.value.toLocaleString()}원</li>
-          <li>주문ID: {orderId}</li>
+          <li>내역: {bsOrder.productName}</li>
+          <li>금액: {bsOrder.amount?.toLocaleString()}원</li>
+          <li>주문ID: {bsOrder.orderId}</li>
         </ul>
         {/* 결제 UI */}
         <div id="payment-method" />
@@ -111,9 +131,9 @@ function WidgetCheckoutPage() {
             try {
               // 결제를 요청 전, 결제 정보(orderId, amount) 서버 저장 - 결제 금액 확인 용
               const saveProductInfoReq = {
-                orderId: orderId,
-                amount: amount.value,
-                productName: productName,
+                orderId: bsOrder.orderId,
+                amount: bsOrder.amount,
+                productName: bsOrder.productName,
               };
               console.log("저장 정보: ", JSON.stringify(saveProductInfoReq));
               await api
@@ -125,8 +145,8 @@ function WidgetCheckoutPage() {
                   console.error("저장 실패:", error);
                 });
               await widgets.requestPayment({
-                orderId: orderId, // 주문 고유 번호
-                orderName: productName,
+                orderId: bsOrder.orderId, // 주문 고유 번호
+                orderName: bsOrder.productName,
                 successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
                 failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
                 customerEmail: "customer123@gmail.com",

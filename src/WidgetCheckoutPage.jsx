@@ -70,7 +70,10 @@ function WidgetCheckoutPage() {
         return;
       }
       // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
-      await widgets.setAmount(amount);
+      await widgets.setAmount({
+        currency: "KRW",
+        value: bsOrder.amount,
+      });
 
       await Promise.all([
         // ------  결제 UI 렌더링 ------
@@ -108,9 +111,9 @@ function WidgetCheckoutPage() {
             margin: "5%",
           }}
         >
-          <li>내역: {productName}</li>
-          <li>금액: {amount.value.toLocaleString()}원</li>
-          <li>주문ID: {orderId}</li>
+          <li>내역: {bsOrder.productName}</li>
+          <li>금액: {bsOrder.amount?.toLocaleString()}원</li>
+          <li>주문ID: {bsOrder.orderId}</li>
         </ul>
         {/* 결제 UI */}
         <div id="payment-method" />
@@ -128,9 +131,9 @@ function WidgetCheckoutPage() {
             try {
               // 결제를 요청 전, 결제 정보(orderId, amount) 서버 저장 - 결제 금액 확인 용
               const saveProductInfoReq = {
-                orderId: orderId,
-                amount: amount.value,
-                productName: productName,
+                orderId: bsOrder.orderId,
+                amount: bsOrder.amount,
+                productName: bsOrder.productName,
               };
               console.log("저장 정보: ", JSON.stringify(saveProductInfoReq));
               await api
@@ -142,8 +145,8 @@ function WidgetCheckoutPage() {
                   console.error("저장 실패:", error);
                 });
               await widgets.requestPayment({
-                orderId: orderId, // 주문 고유 번호
-                orderName: productName,
+                orderId: bsOrder.orderId, // 주문 고유 번호
+                orderName: bsOrder.productName,
                 successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
                 failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
                 customerEmail: "customer123@gmail.com",

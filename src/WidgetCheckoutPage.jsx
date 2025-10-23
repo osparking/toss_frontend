@@ -1,7 +1,6 @@
 import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import "./App.css";
-import getOrderIdPrefix from "./util/service";
 import { api } from "./util/api";
 
 // 전자결제 신청 및 가입 완료 후, clientKey 를 다음으로 수정할 것.
@@ -14,14 +13,32 @@ function generateRandomString() {
 }
 
 function WidgetCheckoutPage() {
-  const [amount, setAmount] = useState({
-    currency: "KRW",
-    value: 10700,
-  });
-  const productName = "백설공주 2개 등";
-  const orderId = getOrderIdPrefix(6) + "00000001";
-
   const [widgets, setWidgets] = useState(null);
+  const [bsOrder, setBsOrder] = useState({ amount: 0 });
+
+  useEffect(() => {
+    async function fetchOrderInfo() {
+      try {
+        console.log("후단에서 orderId 등 결제 정보를 읽어온다.");
+        const url = new URL("http://localhost:9193/payments/orderInfo");
+        let response = await fetch(url, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        let orderInfo = await response.json();
+        setBsOrder(orderInfo);
+        console.log("주문 정보: ", JSON.stringify(orderInfo));
+      } catch (error) {
+        console.error("주문 정보 읽기 오류:", error);
+      }
+    }
+
+    fetchOrderInfo();
+  }, []);
 
   useEffect(() => {
     async function fetchPaymentWidgets() {

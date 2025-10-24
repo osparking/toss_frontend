@@ -38,7 +38,7 @@ export function WidgetSuccessPage() {
       if (!checkResult.matches) {
         throw { message: "결제 금액 불일치 오류", code: 400 };
       }
-      setOrderName(checkResult.productName);
+      setOrderName(checkResult.orderName);
 
       const requestData = {
         ...params,

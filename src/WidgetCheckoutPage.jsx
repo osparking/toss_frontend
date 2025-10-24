@@ -66,7 +66,7 @@ function WidgetCheckoutPage() {
 
   useEffect(() => {
     async function renderPaymentWidgets() {
-      if (widgets == null) {
+      if (widgets == null || bsOrder.amount === 0) {
         return;
       }
       // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
@@ -111,7 +111,7 @@ function WidgetCheckoutPage() {
             margin: "5%",
           }}
         >
-          <li>내역: {bsOrder.productName}</li>
+          <li>내역: {bsOrder.orderName}</li>
           <li>금액: {bsOrder.amount?.toLocaleString()}원</li>
           <li>주문ID: {bsOrder.orderId}</li>
         </ul>
@@ -130,14 +130,14 @@ function WidgetCheckoutPage() {
           onClick={async () => {
             try {
               // 결제를 요청 전, 결제 정보(orderId, amount) 서버 저장 - 결제 금액 확인 용
-              const saveProductInfoReq = {
+              const saveOrderInfoReq = {
                 orderId: bsOrder.orderId,
                 amount: bsOrder.amount,
-                productName: bsOrder.productName,
+                orderName: bsOrder.orderName,
               };
-              console.log("저장 정보: ", JSON.stringify(saveProductInfoReq));
+              console.log("저장 정보: ", JSON.stringify(saveOrderInfoReq));
               await api
-                .post("/saveProductInfo", saveProductInfoReq)
+                .post("/saveOrderInfo", saveOrderInfoReq)
                 .then((response) => {
                   console.log("금액 저장:", response.data);
                 })
@@ -146,7 +146,7 @@ function WidgetCheckoutPage() {
                 });
               await widgets.requestPayment({
                 orderId: bsOrder.orderId, // 주문 고유 번호
-                orderName: bsOrder.productName,
+                orderName: bsOrder.orderName,
                 successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
                 failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
                 customerEmail: "customer123@gmail.com",

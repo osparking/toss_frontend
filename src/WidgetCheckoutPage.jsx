@@ -66,7 +66,7 @@ function WidgetCheckoutPage() {
 
   useEffect(() => {
     async function renderPaymentWidgets() {
-      if (widgets == null) {
+      if (widgets == null || bsOrder.amount === 0) {
         return;
       }
       // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount

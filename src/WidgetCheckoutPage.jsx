@@ -66,7 +66,12 @@ function WidgetCheckoutPage() {
 
   useEffect(() => {
     async function renderPaymentWidgets() {
-      if (widgets == null || bsOrder.amount === 0) {
+      if (widgets == null) {
+        console.log("위젯은 널")
+        return;
+      }
+      if (bsOrder.amount === 0) {
+        console.log("금액은 0")
         return;
       }
       // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
@@ -97,7 +102,7 @@ function WidgetCheckoutPage() {
     }
 
     renderPaymentWidgets();
-  }, [widgets]);
+  }, [widgets, bsOrder]);
 
   return (
     <div className="wrapper">

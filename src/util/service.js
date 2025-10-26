@@ -2,6 +2,10 @@ const ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const NUMERIC = "0123456789_-";
 const CHARS = ALPHA + NUMERIC;
 
+export function readRecentPayments() {
+  return ["이것은 최근 결제 자료 (최대)3건입니다."];
+}
+
 export default function getOrderIdPrefix(length) {
   // Use crypto.getRandomValues for better security in browsers
   const array = new Uint32Array(length);

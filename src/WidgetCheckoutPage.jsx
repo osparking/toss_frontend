@@ -19,7 +19,6 @@ function WidgetCheckoutPage() {
   useEffect(() => {
     async function fetchOrderInfo() {
       try {
-        console.log("후단에서 orderId 등 결제 정보를 읽어온다.");
         const url = new URL("http://localhost:9193/payments/orderInfo");
         let response = await fetch(url, {
           method: "GET",
@@ -31,7 +30,7 @@ function WidgetCheckoutPage() {
 
         let orderInfo = await response.json();
         setBsOrder(orderInfo);
-        console.log("주문 정보: ", JSON.stringify(orderInfo));
+        console.log("후단에서 읽은 결제 정보: ", JSON.stringify(orderInfo));
       } catch (error) {
         console.error("주문 정보 읽기 오류:", error);
       }

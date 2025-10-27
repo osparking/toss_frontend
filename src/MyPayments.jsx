@@ -1,6 +1,6 @@
+import { Button, Table } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./MyPayments.css";
-import { Button, Table } from "react-bootstrap";
 
 const MyPaymentsPage = () => {
   const location = useLocation();

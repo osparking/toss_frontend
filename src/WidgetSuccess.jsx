@@ -115,15 +115,6 @@ export function WidgetSuccessPage() {
           </tbody>
         </table>
       </PaymentDoneModal>
-      <div
-        className="box_section"
-        style={{ width: "600px", textAlign: "left" }}
-      >
-        <b>Response Data :</b>
-        <div id="response" style={{ whiteSpace: "initial" }}>
-          {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}
-        </div>
-      </div>
     </>
   );
 }

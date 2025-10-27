@@ -7,7 +7,7 @@ import { prefix } from "./util/api";
 export function WidgetSuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [responseData, setResponseData] = useState(null);
+  const [myPayments, setMyPayments] = useState([]);
   const [orderName, setOrderName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,7 +17,7 @@ export function WidgetSuccessPage() {
         orderId: searchParams.get("orderId"),
         amount: parseInt(searchParams.get("amount")),
       };
-      console.log("saved amount check request: ", JSON.stringify(params));
+      console.log("결제액 재확인 요청: ", JSON.stringify(params));
 
       // For GET requests - using URL object
       const url = new URL("http://localhost:9193/payments/checkAmount");
@@ -45,7 +45,7 @@ export function WidgetSuccessPage() {
         paymentKey: searchParams.get("paymentKey"),
       };
 
-      response = await fetch(`${prefix}/confirm`, {
+      const myRecentPayments = await fetch(`${prefix}/confirm`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,14 +53,13 @@ export function WidgetSuccessPage() {
         body: JSON.stringify(requestData),
       });
 
-      const paymentConfirmResponse = await response.json();
-      return paymentConfirmResponse;
+      const myRecentPaymentsJson = await myRecentPayments.json();
+      console.log("결제 목록: ", myRecentPaymentsJson);
+      setMyPayments(myRecentPaymentsJson);
     }
 
     confirm()
-      .then((data) => {
-        setResponseData(data);
-        console.log("order name: ", data.orderName);
+      .then(() => {
         setIsModalOpen(true);
       })
       .catch((error) => {
@@ -77,11 +76,17 @@ export function WidgetSuccessPage() {
     },
     { property: "결제 키:", value: searchParams.get("paymentKey") },
   ];
+
+  function closeModal() {
+    setIsModalOpen(false);
+    navigate("/my_payments", { state: { data: myPayments } });
+  }
+
   return (
     <>
       <PaymentDoneModal
         show={isModalOpen}
-        onHide={() => setIsModalOpen(false)}
+        onHide={closeModal}
         title="결제 완료"
       >
         <img

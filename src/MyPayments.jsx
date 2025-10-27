@@ -1,24 +1,43 @@
+import { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import PaymentCountSelect from "./components/PaymentCountSelect";
 import "./MyPayments.css";
 import { formatDate } from "./util/service";
+import { getMyRecentPayments } from "./PaymentService";
 
 const MyPaymentsPage = () => {
   const location = useLocation();
-  const recentPayments = location.state?.data;
+  const [recentPayments, setRecentPayments] = useState(location.state?.data);
   const navigate = useNavigate();
 
   const gotoPayment = () => {
     navigate("/");
   };
 
+  async function changeRecentPayments(count) {
+    try {
+      const myRecentPayments = await getMyRecentPayments(count);
+      console.log("결제 목록: ", myRecentPayments);
+      setRecentPayments(myRecentPayments);
+    } catch (error) {
+      console.error("Error in changeRecentPayments:", error);
+    }
+  }
+
   return (
     <div className="box_section" style={{ width: "800px", textAlign: "left" }}>
       <div className="d-flex justify-content-center align-items-center">
         <h3>최근 결제 목록</h3>
       </div>
-      <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex justify-content-between">
+        <div style={{ width: "100px", visibility: "hidden" }}>
+          <PaymentCountSelect />
+        </div>
         <h5>(결제일시 역순)</h5>
+        <div style={{ width: "100px" }}>
+          <PaymentCountSelect changeRecentPayments={changeRecentPayments} />
+        </div>
       </div>
       <div
         id="response"

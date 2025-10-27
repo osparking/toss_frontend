@@ -2,8 +2,15 @@ const ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const NUMERIC = "0123456789_-";
 const CHARS = ALPHA + NUMERIC;
 
-export function readRecentPayments() {
-  return ["이것은 최근 결제 자료 (최대)3건입니다."];
+export function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear().toString().slice(-2); // Get last 2 digits
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+  return `${year}년${month}월${day}일 ${hours}:${minutes}`;
 }
 
 export default function getOrderIdPrefix(length) {

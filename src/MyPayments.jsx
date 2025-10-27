@@ -1,6 +1,7 @@
 import { Button, Table } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./MyPayments.css";
+import { formatDate } from "./util/service";
 
 const MyPaymentsPage = () => {
   const location = useLocation();
@@ -40,7 +41,7 @@ const MyPaymentsPage = () => {
               recentPayments.map((payment, idx) => (
                 <tr key={idx}>
                   <td>{payment.orderId}</td>
-                  <td>{payment.approvedAt}</td>
+                  <td>{formatDate(payment.approvedAt)}</td>
                   <td>{payment.method}</td>
                   <td>{Number(payment.totalAmount).toLocaleString()}원</td>
                   <td>{payment.orderName}</td>

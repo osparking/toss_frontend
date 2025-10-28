@@ -2,6 +2,13 @@ table {
   margin-top: 20px;
 }
 
-th {
+th, .text-center{
   text-align: center;
+}
+
+.payment_table_div {
+  min-width: 800px;
+  width: 850px;
+  max-width: 1000px;
+  text-align: left;
 }

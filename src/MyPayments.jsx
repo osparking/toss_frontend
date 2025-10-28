@@ -26,7 +26,7 @@ const MyPaymentsPage = () => {
   }
 
   return (
-    <div className="box_section" style={{ width: "800px", textAlign: "left" }}>
+    <div className="box_section payment_table_div">
       <div className="d-flex justify-content-center align-items-center">
         <h3>최근 결제 목록</h3>
       </div>
@@ -61,10 +61,10 @@ const MyPaymentsPage = () => {
                 <tr key={idx}>
                   <td>{payment.orderId}</td>
                   <td>{formatDate(payment.approvedAt)}</td>
-                  <td>{payment.method}</td>
+                  <td className="text-center">{payment.method}</td>
                   <td>{Number(payment.totalAmount).toLocaleString()}원</td>
                   <td>{payment.orderName}</td>
-                  <td>
+                  <td className="text-center">
                     <a href={payment.receiptUrl} target="_blank">
                       링크
                     </a>

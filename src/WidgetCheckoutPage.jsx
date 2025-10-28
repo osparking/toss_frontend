@@ -66,11 +66,11 @@ function WidgetCheckoutPage() {
   useEffect(() => {
     async function renderPaymentWidgets() {
       if (widgets == null) {
-        console.log("위젯은 널")
+        console.log("위젯은 널");
         return;
       }
       if (bsOrder.amount === 0) {
-        console.log("금액은 0")
+        console.log("금액은 0");
         return;
       }
       // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
@@ -154,7 +154,7 @@ function WidgetCheckoutPage() {
                 successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
                 failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
                 customerEmail: "customer123@gmail.com",
-                customerName: "김토스",
+                customerName: "범이고객",
                 // 가상계좌 안내, 퀵계좌이체 휴대폰 번호 자동 완성에 사용되는 값입니다. 필요하다면 주석을 해제해 주세요.
                 // customerMobilePhone: "01012341234",
               });

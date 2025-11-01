@@ -6,3 +6,8 @@ export const api = axios.create({
   baseURL: prefix,
   withCredentials: true,
 });
+
+export const api2 = axios.create({
+  baseURL: "http://localhost:9193/order",
+  withCredentials: true,
+});
